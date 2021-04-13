@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CountDownLooper</string>
+
+    <string name="time_set">%02d : %02d : %02d</string>
+    <string name="repetition_starts">El temporizador empezará en:</string>
+    <string name="repetition_remaining">Quedan %d repeticiones</string>
+    <string name="content_description_btn_start">Botón de iniciar Timer</string>
+    <string name="last_repetition_text">ÚLTIMA REPETICIÓN</string>
+</resources>

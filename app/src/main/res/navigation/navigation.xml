@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    app:startDestination="@id/timerSettingsFragment">
+
+    <fragment
+        android:id="@+id/timerSettingsFragment"
+        android:name="com.toms.applications.countdownlooper.screens.settings.TimerSettingsFragment"
+        android:label="TimerSettingsFragment" >
+        <action
+            android:id="@+id/action_timerSettingsFragment_to_timerFragment"
+            app:destination="@id/timerFragment"
+            app:enterAnim="@anim/fragment_close_enter"
+            app:exitAnim="@anim/fragment_fade_exit"
+            app:popEnterAnim="@anim/fragment_fade_enter"
+            app:popExitAnim="@anim/fragment_close_exit" />
+    </fragment>
+    <fragment
+        android:id="@+id/timerFragment"
+        android:name="com.toms.applications.countdownlooper.screens.timer.TimerFragment"
+        android:label="TimerFragment" >
+        <argument
+            android:name="hours"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="minutes"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="seconds"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="repetition"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+</navigation>
