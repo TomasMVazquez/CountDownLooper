@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -13,6 +14,7 @@ import com.toms.applications.countdownlooper.R
 import com.toms.applications.countdownlooper.databinding.FragmentTimerBinding
 import com.toms.applications.countdownlooper.utils.BeepHelper
 import com.toms.applications.countdownlooper.utils.getViewModel
+import com.toms.applications.countdownlooper.utils.onGetTime
 import com.toms.applications.countdownlooper.utils.toTimerStringFormat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +24,7 @@ import kotlin.properties.Delegates
 class TimerFragment : Fragment() {
 
     private lateinit var binding: FragmentTimerBinding
-    private lateinit var timerViewModel: TimerViewModel
+    private lateinit var viewModel: TimerViewModel
     private val args by navArgs<TimerFragmentArgs>()
 
     private val beep = BeepHelper()
@@ -35,46 +37,53 @@ class TimerFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timer, container, false)
 
+        requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+
         repetition = args.repetition
         val hours = TimeUnit.HOURS.toMillis(args.hours.toLong())
         val minutes = TimeUnit.MINUTES.toMillis(args.minutes.toLong())
         val seconds = TimeUnit.SECONDS.toMillis(args.seconds.toLong())
+        val timeInBetweenSetted = onGetTime(requireContext()).toLong() * 1000
 
-        timerViewModel = getViewModel { TimerViewModel(hours + minutes + seconds) }
-        binding.timerViewModel = timerViewModel
-        binding.repetitions = repetition
+        viewModel = getViewModel { TimerViewModel(timeInBetweenSetted,hours + minutes + seconds) }
 
-        binding.timerText.text = getString(R.string.time_set,args.hours,args.minutes,args.seconds)
+        with(binding){
+            timerViewModel = viewModel
+            repetitions = repetition
+            timerText.text = getString(R.string.time_set,args.hours,args.minutes,args.seconds)
 
-        timerViewModel.currentTimeInBetween.observe(viewLifecycleOwner) { newTime ->
-            binding.timerInBetweenText.text =  newTime.toTimerStringFormat()
-        }
-
-        timerViewModel.currentTime.observe(viewLifecycleOwner) { newTime ->
-            binding.timerText.text = newTime.toTimerStringFormat()
-        }
-
-        timerViewModel.repetitionFinished.observe(viewLifecycleOwner){
-            it.getContentIfNotHandled()?.let {
-                lifecycleScope.launch {
-                    delay(500)
-                    onStartTimer()
+            with(viewModel){
+                currentTimeInBetween.observe(viewLifecycleOwner) { newTime ->
+                    timerInBetweenText.text =  newTime.toTimerStringFormat()
                 }
-            }
-        }
 
-        timerViewModel.inBetweenTimeFinished.observe(viewLifecycleOwner){
-            it.getContentIfNotHandled()?.let {
-                onStartTimerInBetween()
-            }
-        }
+                currentTime.observe(viewLifecycleOwner) { newTime ->
+                    timerText.text = newTime.toTimerStringFormat()
+                }
 
-        timerViewModel.eventBeep.observe(viewLifecycleOwner){ event ->
-            event.getContentIfNotHandled()?.let {
-                when(it){
-                    TimerViewModel.BeepType.IN_BETWEEN -> beep.beep()
-                    TimerViewModel.BeepType.SHORT -> beep.shortBeep()
-                    TimerViewModel.BeepType.LONG -> beep.longBeep()
+                repetitionFinished.observe(viewLifecycleOwner){
+                    it.getContentIfNotHandled()?.let {
+                        lifecycleScope.launch {
+                            delay(500)
+                            onStartTimer()
+                        }
+                    }
+                }
+
+                inBetweenTimeFinished.observe(viewLifecycleOwner){
+                    it.getContentIfNotHandled()?.let {
+                        onStartTimerInBetween()
+                    }
+                }
+
+                eventBeep.observe(viewLifecycleOwner){ event ->
+                    event.getContentIfNotHandled()?.let {
+                        when(it){
+                            TimerViewModel.BeepType.IN_BETWEEN -> beep.beep()
+                            TimerViewModel.BeepType.SHORT -> beep.shortBeep()
+                            TimerViewModel.BeepType.LONG -> beep.longBeep()
+                        }
+                    }
                 }
             }
         }
@@ -83,7 +92,7 @@ class TimerFragment : Fragment() {
     }
 
     private fun onStartTimerInBetween() {
-        timerViewModel.startTimer()
+        viewModel.startTimer()
     }
 
     private fun onStartTimer(){
@@ -91,9 +100,14 @@ class TimerFragment : Fragment() {
             binding.timerText.text = getString(R.string.time_set,args.hours,args.minutes,args.seconds)
             repetition--
             binding.repetitions = repetition
-            timerViewModel.startTimerInBetween()
+            viewModel.startTimerInBetween()
         }else{
             findNavController().popBackStack()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        requireActivity().window?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

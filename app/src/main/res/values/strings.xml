@@ -1,9 +1,18 @@
 <resources>
-    <string name="app_name">CountDownLooper</string>
+    <string name="app_name">Count Down Looper</string>
+    <string name="settings">Configuración</string>
+    <string name="about_us">Sobre nosotros</string>
+
+    <string name="time_in_between">Tiempo entre repeticiones: </string>
 
     <string name="time_set">%02d : %02d : %02d</string>
     <string name="repetition_starts">El temporizador empezará en:</string>
     <string name="repetition_remaining">Quedan %d repeticiones</string>
     <string name="content_description_btn_start">Botón de iniciar Timer</string>
     <string name="last_repetition_text">ÚLTIMA REPETICIÓN</string>
+
+    <string name="description_about_me">Esta aplicación fue desarrollada por una programador, aburrido, que no tuvo mejor idea que intentar realizar ejercicios de estiramiento y necesitaba contar el tiempo entre posiciones.</string>
+    <string name="description_about_app">Esta aplicación te servirá como temporizador, que se repite la cantidad de veces que deseas.\nAdemás tienes la opción de configurar un descanso de unos segundos entre repeticiones.</string>
+    <string name="play_store_apps"><div>Si quieres ver más aplicaciones mías: <a href="https://play.google.com/store/apps/developer?id=Tomás+M.+Vazquez">Play Store</a></div></string>
+
 </resources>

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toms.applications.countdownlooper.utils.Event
 
-class TimerViewModel(private val countDownTime: Long): ViewModel() {
+class TimerViewModel(private val timeInBetween: Long,private val countDownTime: Long): ViewModel() {
 
     enum class BeepType { IN_BETWEEN , SHORT, LONG }
 
@@ -55,7 +55,8 @@ class TimerViewModel(private val countDownTime: Long): ViewModel() {
     }
 
     fun startTimerInBetween(){
-        timerInBetween = object : CountDownTimer(COUNT_DOWN_TIME_IN_BETWEEN, ONE_SECOND) {
+        val time = if (timeInBetween >= 0) timeInBetween else COUNT_DOWN_TIME_IN_BETWEEN
+        timerInBetween = object : CountDownTimer(time, ONE_SECOND) {
 
             override fun onTick(millisUntilFinished: Long) {
                 _currentTimeInBetween.value = (millisUntilFinished / ONE_SECOND)
@@ -74,7 +75,8 @@ class TimerViewModel(private val countDownTime: Long): ViewModel() {
     }
 
     private fun stopMyTimer(){
-        timer.cancel()
+        if (::timer.isInitialized)
+            timer.cancel()
     }
 
     private fun stopTimerInBetween(){
