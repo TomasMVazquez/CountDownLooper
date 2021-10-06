@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 fun Fragment.hideKeyboard() {
     val inputMethodManager = this.activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -42,4 +43,16 @@ fun Long.toTimerStringFormat(): String{
     val sb = StringBuilder(8)
     val f = Formatter(sb, Locale.getDefault())
     return f.format("%1\$02d : %2\$02d : %3\$02d", hours, minutes, seconds).toString()
+}
+
+fun String.toTimerLongFormat(): Long {
+    var text = this
+
+    var textSplitted = text.split(":")
+
+    val hours = TimeUnit.HOURS.toMillis(textSplitted[0].trim().toLong())
+    val minutes = TimeUnit.MINUTES.toMillis(textSplitted[1].trim().toLong())
+    val seconds = TimeUnit.SECONDS.toMillis(textSplitted[2].trim().toLong())
+
+    return hours + minutes + seconds
 }

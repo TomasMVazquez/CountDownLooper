@@ -12,10 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.toms.applications.countdownlooper.R
 import com.toms.applications.countdownlooper.databinding.FragmentTimerBinding
-import com.toms.applications.countdownlooper.utils.BeepHelper
-import com.toms.applications.countdownlooper.utils.getViewModel
-import com.toms.applications.countdownlooper.utils.onGetTime
-import com.toms.applications.countdownlooper.utils.toTimerStringFormat
+import com.toms.applications.countdownlooper.utils.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -28,6 +25,8 @@ class TimerFragment : Fragment() {
     private val args by navArgs<TimerFragmentArgs>()
 
     private val beep = BeepHelper()
+    private var countDownTime: Long = 0L
+    private var timeInBetweenSetted: Long = 0L
 
     private var repetition by Delegates.notNull<Int>()
 
@@ -43,9 +42,12 @@ class TimerFragment : Fragment() {
         val hours = TimeUnit.HOURS.toMillis(args.hours.toLong())
         val minutes = TimeUnit.MINUTES.toMillis(args.minutes.toLong())
         val seconds = TimeUnit.SECONDS.toMillis(args.seconds.toLong())
-        val timeInBetweenSetted = onGetTime(requireContext()).toLong() * 1000
+        countDownTime = hours + minutes + seconds
 
-        viewModel = getViewModel { TimerViewModel(timeInBetweenSetted,hours + minutes + seconds) }
+        val timeSaved = onGetTime(requireContext())
+        timeInBetweenSetted = if (timeSaved >= 0) (timeSaved.toLong() * 1000) else TimerViewModel.COUNT_DOWN_TIME_IN_BETWEEN
+
+        viewModel = getViewModel { TimerViewModel(timeInBetweenSetted) }
 
         with(binding){
             timerViewModel = viewModel
@@ -85,6 +87,26 @@ class TimerFragment : Fragment() {
                         }
                     }
                 }
+
+                onMyTimerPause.observe(viewLifecycleOwner){ onPause ->
+                    if (onPause){
+                        fabBtnPause.setImageResource(R.drawable.ic_start)
+                        stopMyTimer()
+                    } else {
+                        fabBtnPause.setImageResource(R.drawable.ic_pause_24)
+                        startTimer(timerText.text.toString().toTimerLongFormat())
+                    }
+                }
+
+                onBetweenTimerPause.observe(viewLifecycleOwner){ onPause ->
+                    if (onPause){
+                        fabMiniBtnPause.setImageResource(R.drawable.ic_start)
+                        stopTimerInBetween()
+                    } else {
+                        fabMiniBtnPause.setImageResource(R.drawable.ic_pause_24)
+                        startTimerInBetween(timerInBetweenText.text.toString().toTimerLongFormat())
+                    }
+                }
             }
         }
 
@@ -92,15 +114,19 @@ class TimerFragment : Fragment() {
     }
 
     private fun onStartTimerInBetween() {
-        viewModel.startTimer()
+        binding.fabMiniBtnPause.visibility = View.GONE
+        viewModel.startTimer(countDownTime)
+        binding.fabBtnPause.visibility = View.VISIBLE
     }
 
     private fun onStartTimer(){
+        binding.fabMiniBtnPause.visibility = View.VISIBLE
+        binding.fabBtnPause.visibility = View.GONE
         if (repetition > 0){
             binding.timerText.text = getString(R.string.time_set,args.hours,args.minutes,args.seconds)
             repetition--
             binding.repetitions = repetition
-            viewModel.startTimerInBetween()
+            viewModel.startTimerInBetween(timeInBetweenSetted)
         }else{
             findNavController().popBackStack()
         }

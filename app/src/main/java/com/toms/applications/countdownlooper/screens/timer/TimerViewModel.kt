@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toms.applications.countdownlooper.utils.Event
 
-class TimerViewModel(private val timeInBetween: Long,private val countDownTime: Long): ViewModel() {
+class TimerViewModel(private val timeInBetween: Long): ViewModel() {
 
     enum class BeepType { IN_BETWEEN , SHORT, LONG }
 
@@ -28,11 +28,17 @@ class TimerViewModel(private val timeInBetween: Long,private val countDownTime: 
     private val _eventBeep = MutableLiveData<Event<BeepType>>()
     val eventBeep: LiveData<Event<BeepType>> get() = _eventBeep
 
+    private val _onMyTimerPause = MutableLiveData<Boolean>()
+    val onMyTimerPause: LiveData<Boolean> get() = _onMyTimerPause
+
+    private val _onBetweenTimerPause = MutableLiveData<Boolean>()
+    val onBetweenTimerPause: LiveData<Boolean> get() = _onBetweenTimerPause
+
     init {
-        startTimerInBetween()
+        startTimerInBetween(timeInBetween)
     }
 
-    fun startTimer(){
+    fun startTimer(countDownTime: Long){
         startMyTimer(countDownTime)
     }
 
@@ -54,8 +60,7 @@ class TimerViewModel(private val timeInBetween: Long,private val countDownTime: 
         timer.start()
     }
 
-    fun startTimerInBetween(){
-        val time = if (timeInBetween >= 0) timeInBetween else COUNT_DOWN_TIME_IN_BETWEEN
+    fun startTimerInBetween(time: Long){
         timerInBetween = object : CountDownTimer(time, ONE_SECOND) {
 
             override fun onTick(millisUntilFinished: Long) {
@@ -74,12 +79,20 @@ class TimerViewModel(private val timeInBetween: Long,private val countDownTime: 
         timerInBetween.start()
     }
 
-    private fun stopMyTimer(){
+    fun pauseMyTimer(){
+        _onMyTimerPause.value = (onMyTimerPause.value != true)
+    }
+
+    fun pauseBetweenTimer(){
+        _onBetweenTimerPause.value = (onBetweenTimerPause.value != true)
+    }
+
+    fun stopMyTimer(){
         if (::timer.isInitialized)
             timer.cancel()
     }
 
-    private fun stopTimerInBetween(){
+    fun stopTimerInBetween(){
         timerInBetween.cancel()
     }
 
