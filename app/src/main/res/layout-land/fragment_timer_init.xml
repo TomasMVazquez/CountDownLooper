@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:fontFamily="@font/orbitron_medium"
+            android:fontFamily="@font/orbitron_medium_xml"
             android:gravity="center"
             android:text="@{@string/time_set(numPickerHours.value,numPickerMinutes.value,numPickerSeconds.value)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"

@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:fontFamily="@font/orbitron_medium"
+            android:fontFamily="@font/orbitron_medium_xml"
             android:gravity="center"
             android:text="@{@string/time_set(numPickerHours.value,numPickerMinutes.value,numPickerSeconds.value)}"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
@@ -83,7 +83,7 @@
                 android:layout_weight="70"
                 android:autoSizeTextType="uniform"
                 android:gravity="center"
-                android:text="Repeticiones"
+                android:text="@string/label_repeat"
                 android:textColor="@color/white" />
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,6 +117,7 @@
             android:src="@drawable/ic_start"
             app:fabSize="normal"
             android:visibility="gone"
+            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
