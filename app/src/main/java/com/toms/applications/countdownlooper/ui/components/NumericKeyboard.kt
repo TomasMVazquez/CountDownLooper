@@ -23,64 +23,48 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.toms.applications.countdownlooper.R
 
-@ExperimentalFoundationApi
 @Composable
-fun NumericKeyboard(onClick: (String) -> Unit){
-    val numbers = (1..9).map { it.toString() }.toMutableList().apply {
-        add("00")
-        add("0")
-        add("")
-    }
+fun NumericKeyboard(numbers: List<String>,onClick: (String) -> Unit){
 
-    Box(modifier = Modifier.wrapContentSize(),
-        contentAlignment = Alignment.TopCenter
+    LazyRow(
+        modifier = Modifier.fillMaxWidth().padding(0.dp,8.dp),
+        horizontalArrangement = Arrangement.SpaceAround,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        LazyVerticalGrid(
-            modifier = Modifier,
-            cells = GridCells.Fixed(3)
-        ){
-            items(numbers){ item ->
-                Box(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .wrapContentSize(),
-                    contentAlignment = Alignment.Center
+        items(numbers) { number ->
+            if(number.isNotEmpty()) {
+                TextButton(
+                    modifier = Modifier.size(50.dp),
+                    shape = CircleShape,
+                    border = BorderStroke(1.dp, Color.LightGray),
+                    colors = textButtonColors(
+                        contentColor = Color.White,
+                        backgroundColor = MaterialTheme.colors.primaryVariant
+                    ),
+                    onClick = { onClick(number) }
                 ) {
-                    if(numbers[numbers.size -1] != item) {
-                        TextButton(
-                            modifier = Modifier.size(50.dp),
-                            shape = CircleShape,
-                            border = BorderStroke(1.dp, Color.LightGray),
-                            colors = textButtonColors(
-                                contentColor = Color.White,
-                                backgroundColor = MaterialTheme.colors.primaryVariant
-                            ),
-                            onClick = { onClick(item) }
-                        ) {
-                            Text(
-                                text = item,
-                                style = MaterialTheme.typography.body2
-                            )
-                        }
-                    }else {
-                        OutlinedButton(
-                            modifier = Modifier.size(50.dp),
-                            onClick = { onClick(item) },
-                            border = BorderStroke(1.dp, MaterialTheme.colors.primary),
-                            shape = CircleShape,
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                backgroundColor = MaterialTheme.colors.background,
-                                contentColor = MaterialTheme.colors.primary
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Backspace,
-                                contentDescription = stringResource(
-                                    R.string.content_description_clear
-                                )
-                            )
-                        }
-                    }
+                    Text(
+                        text = number,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+            }else {
+                OutlinedButton(
+                    modifier = Modifier.size(50.dp),
+                    onClick = { onClick(number) },
+                    border = BorderStroke(1.dp, MaterialTheme.colors.primary),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        backgroundColor = MaterialTheme.colors.background,
+                        contentColor = MaterialTheme.colors.primary
+                    )
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.Backspace,
+                        contentDescription = stringResource(
+                            R.string.content_description_clear
+                        )
+                    )
                 }
             }
         }
