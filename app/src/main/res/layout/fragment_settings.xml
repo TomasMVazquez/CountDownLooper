@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/orbitron_medium"
+            android:fontFamily="@font/orbitron_medium_xml"
             android:gravity="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/primary_medium"

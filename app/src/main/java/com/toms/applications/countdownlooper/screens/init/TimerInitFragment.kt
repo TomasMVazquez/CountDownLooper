@@ -2,73 +2,146 @@ package com.toms.applications.countdownlooper.screens.init
 
 import android.os.Bundle
 import android.view.*
-import android.view.inputmethod.EditorInfo
-import android.widget.NumberPicker.OnScrollListener.SCROLL_STATE_IDLE
-import androidx.databinding.DataBindingUtil
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.textButtonColors
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import com.toms.applications.countdownlooper.R
-import com.toms.applications.countdownlooper.databinding.FragmentTimerInitBinding
-import com.toms.applications.countdownlooper.utils.hideKeyboard
 import androidx.navigation.fragment.findNavController
+import com.google.accompanist.flowlayout.FlowColumn
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.navigationBarsWithImePadding
+import com.toms.applications.countdownlooper.ui.components.*
+import com.toms.applications.countdownlooper.utils.composeView
+import com.toms.applications.countdownlooper.utils.toTimeFormat
+import com.toms.applications.countdownlooper.utils.toTimer
 
 
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
 class TimerInitFragment : Fragment() {
 
-    private lateinit var binding: FragmentTimerInitBinding
+    private val numbers = (1..9).map { it.toString() }.toMutableList().apply {
+        add("00")
+        add("0")
+        add("")
+    }.chunked(3)
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_timer_init,
-                container,
-                false
-        )
-
+    ): View {
         setHasOptionsMenu(true)
 
-        with(binding){
-            reRunTIET.setText("0")
+        return composeView {
+            var timeSettled by rememberSaveable { mutableStateOf("00 : 00 : 00") }
+            var timeClicked by rememberSaveable { mutableStateOf("") }
+            var repeats by rememberSaveable { mutableStateOf("0") }
 
-            with(numPickerHours){
-                maxValue = 23
-                setFormatter { String.format("%02d", it) }
-                setOnScrollListener { picker, scrollState -> if(scrollState == SCROLL_STATE_IDLE) { onTimeSettled() } }
-            }
-            with(numPickerMinutes){
-                maxValue = 59
-                setFormatter { String.format("%02d", it) }
-                setOnScrollListener { picker, scrollState -> if(scrollState == SCROLL_STATE_IDLE) { onTimeSettled() } }
-            }
-            with(numPickerSeconds){
-                maxValue = 59
-                setFormatter { String.format("%02d", it) }
-                setOnScrollListener { picker, scrollState -> if(scrollState == SCROLL_STATE_IDLE) { onTimeSettled() } }
-            }
+            Scaffold(
+                floatingActionButton = {
+                   if (timeClicked.isNotEmpty() && timeClicked.toInt() > 0){
+                       StartFloatingActionButton(onClick = {
+                           timeClicked.toTimer().let {
+                               onStartCountDown(
+                                   it[0] ?: 0,
+                                   it[1] ?: 0,
+                                   it[2] ?: 0,
+                                   repeats.toInt()
+                               )
+                           }
+                       })
+                   }
+               },
+                floatingActionButtonPosition = FabPosition.Center,
+                backgroundColor = MaterialTheme.colors.background
+            ) { padding ->
 
-            reRunTIET.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE){
-                    if(v.text.isNullOrEmpty()) v.text = "0"
-                    v.clearFocus()
-                    hideKeyboard()
+                LazyColumn(modifier = Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+                    .padding(24.dp)
+                ) {
+
+                    item {
+                        Text(
+                            text = timeSettled,
+                            style = MaterialTheme.typography.h3,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center,
+                            color = Color.White
+                        )
+                    }
+                    item {
+                        GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
+                    }
+
+                    items(numbers){ rowList ->
+                        NumericKeyboard(rowList, onClick = { clicked ->
+                            if (clicked.isNotEmpty()){
+                                clicked.forEach { numberClicked ->
+                                    if (timeClicked.length <= 5) timeClicked += numberClicked
+                                }
+                            }else {
+                                timeClicked = timeClicked.dropLast(1)
+                            }
+                            timeClicked = timeClicked.trimStart('0')
+                            timeSettled = timeClicked.toTimeFormat()
+                        })
+                    }
+                    item {
+                        GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
+                    }
+                    item {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Text(
+                                text = getString(R.string.label_repeat),
+                                color = Color.White
+                            )
+
+                            Spacer(modifier = Modifier.weight(1f))
+
+                            MyOutlinedTextField(
+                                input = repeats,
+                                onValueChange = { repeats = it },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
+                                )
+                            )
+                        }
+                    }
                 }
-                return@setOnEditorActionListener true
-            }
-
-            startFAB.setOnClickListener {
-                val action = TimerInitFragmentDirections.actionTimerSettingsFragmentToTimerFragment(
-                    numPickerHours.value,
-                    numPickerMinutes.value,
-                    numPickerSeconds.value,
-                    reRunTIET.text.toString().toInt()
-                )
-                findNavController().navigate(action)
             }
         }
 
-        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -85,15 +158,14 @@ class TimerInitFragment : Fragment() {
         }
     }
 
-
-    private fun onTimeSettled() {
-        with(binding){
-            if (numPickerHours.value > 0 || numPickerMinutes.value > 0 || numPickerSeconds.value > 0){
-                startFAB.visibility = View.VISIBLE
-            }else{
-                startFAB.visibility = View.GONE
-            }
-        }
+    private fun onStartCountDown(hours: Int, minutes: Int, seconds: Int, repetitions: Int){
+        val action = TimerInitFragmentDirections.actionTimerSettingsFragmentToTimerFragment(
+            hours = hours,
+            minutes = minutes,
+            seconds = seconds,
+            repetition = repetitions
+        )
+        findNavController().navigate(action)
     }
 
 }
