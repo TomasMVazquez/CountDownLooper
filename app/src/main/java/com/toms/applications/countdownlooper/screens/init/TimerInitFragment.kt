@@ -59,7 +59,7 @@ class TimerInitFragment : Fragment() {
         return composeView {
             var timeSettled by rememberSaveable { mutableStateOf("00 : 00 : 00") }
             var timeClicked by rememberSaveable { mutableStateOf("") }
-            var repeats by rememberSaveable { mutableStateOf("0") }
+            var repeats by rememberSaveable { mutableStateOf(0) }
 
             Scaffold(
                 floatingActionButton = {
@@ -70,7 +70,7 @@ class TimerInitFragment : Fragment() {
                                    it[0] ?: 0,
                                    it[1] ?: 0,
                                    it[2] ?: 0,
-                                   repeats.toInt()
+                                   repeats
                                )
                            }
                        })
@@ -113,7 +113,7 @@ class TimerInitFragment : Fragment() {
                         })
                     }
                     item {
-                        GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
+                        GenericSpacer(type = SpacerType.VERTICAL, padding = 2.dp)
                     }
                     item {
                         Row(
@@ -123,18 +123,19 @@ class TimerInitFragment : Fragment() {
 
                             Text(
                                 text = getString(R.string.label_repeat),
+                                style = MaterialTheme.typography.body1,
                                 color = Color.White
                             )
 
-                            Spacer(modifier = Modifier.weight(1f))
-
-                            MyOutlinedTextField(
+                        }
+                    }
+                    item {
+                        Box(modifier = Modifier.fillMaxWidth()) {
+                            PlusMinusNumber(
                                 input = repeats,
-                                onValueChange = { repeats = it },
-                                keyboardOptions = KeyboardOptions(
-                                    keyboardType = KeyboardType.Number,
-                                    imeAction = ImeAction.Done
-                                )
+                                onInputChange = {
+                                    repeats = it
+                                }
                             )
                         }
                     }
