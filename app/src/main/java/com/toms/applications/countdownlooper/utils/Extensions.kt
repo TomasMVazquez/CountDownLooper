@@ -89,13 +89,14 @@ fun String.toTimeFormat(): String {
 }
 
 fun String.toTimer(): Map<Int, Int> {
-    val textChunked = this.trimStart('0').chunked(2)
+    val textChunked = (if (this.length % 2 != 0) "0$this" else this).chunked(2)
+
     var timeSec: Long = 0
 
     when(textChunked.size){
         1 -> timeSec = textChunked[0].toLong()
-        2 -> timeSec = (textChunked[1].toLong() * 60) + textChunked[0].toLong()
-        3 -> timeSec = (textChunked[2].toLong() * 3600) + (textChunked[1].toLong() * 60) + textChunked[0].toLong()
+        2 -> timeSec = (textChunked[0].toLong() * 60) + textChunked[1].toLong()
+        3 -> timeSec = (textChunked[0].toLong() * 3600) + (textChunked[1].toLong() * 60) + textChunked[2].toLong()
     }
 
     val hs = timeSec.toInt() / 3600
