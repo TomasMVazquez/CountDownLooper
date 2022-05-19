@@ -9,7 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.toms.applications.countdownlooper.ui.theme.CountDownLooperTheme
-import java.util.*
+import java.util.Formatter
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 fun Fragment.hideKeyboard() {

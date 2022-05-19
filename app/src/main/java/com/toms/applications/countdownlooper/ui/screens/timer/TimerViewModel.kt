@@ -1,12 +1,15 @@
-package com.toms.applications.countdownlooper.screens.timer
+package com.toms.applications.countdownlooper.ui.screens.timer
 
 import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.toms.applications.countdownlooper.utils.Event
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class TimerViewModel(private val timeInBetween: Long): ViewModel() {
+@HiltViewModel
+class TimerViewModel @Inject constructor() : ViewModel() {
 
     enum class BeepType { IN_BETWEEN , SHORT, LONG }
 
@@ -34,7 +37,7 @@ class TimerViewModel(private val timeInBetween: Long): ViewModel() {
     private val _onBetweenTimerPause = MutableLiveData<Boolean>()
     val onBetweenTimerPause: LiveData<Boolean> get() = _onBetweenTimerPause
 
-    init {
+    fun getStartedTimeInBetween(timeInBetween: Long) {
         startTimerInBetween(timeInBetween)
     }
 
@@ -109,6 +112,6 @@ class TimerViewModel(private val timeInBetween: Long): ViewModel() {
         // This is the number of milliseconds in a second
         const val ONE_SECOND = 1000L
 
-        const val COUNT_DOWN_TIME_IN_BETWEEN = 5000L
+        const val   COUNT_DOWN_TIME_IN_BETWEEN = 5000L
     }
 }

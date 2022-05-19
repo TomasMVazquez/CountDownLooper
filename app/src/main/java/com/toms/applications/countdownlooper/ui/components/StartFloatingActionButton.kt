@@ -1,6 +1,5 @@
 package com.toms.applications.countdownlooper.ui.components
 
-import android.provider.Settings.Global.getString
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons

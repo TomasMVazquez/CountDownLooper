@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/timerSettingsFragment"
-        android:name="com.toms.applications.countdownlooper.screens.init.TimerInitFragment"
+        android:name="com.toms.applications.countdownlooper.ui.screens.init.TimerInitFragment"
         android:label="@string/app_name">
         <action
             android:id="@+id/action_timerSettingsFragment_to_timerFragment"
@@ -26,7 +26,7 @@
     </fragment>
     <fragment
         android:id="@+id/timerFragment"
-        android:name="com.toms.applications.countdownlooper.screens.timer.TimerFragment"
+        android:name="com.toms.applications.countdownlooper.ui.screens.timer.TimerFragment"
         android:label="@string/app_name">
         <argument
             android:name="hours"
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.toms.applications.countdownlooper.screens.settings.SettingsFragment"
+        android:name="com.toms.applications.countdownlooper.ui.screens.settings.SettingsFragment"
         android:label="@string/settings"
         tools:layout="@layout/fragment_settings">
         <action
@@ -60,7 +60,7 @@
     </fragment>
     <fragment
         android:id="@+id/aboutUsFragment"
-        android:name="com.toms.applications.countdownlooper.screens.settings.AboutUsFragment"
+        android:name="com.toms.applications.countdownlooper.ui.screens.settings.AboutUsFragment"
         android:label="@string/about_us"
         tools:layout="@layout/fragment_about_us" />
 </navigation>

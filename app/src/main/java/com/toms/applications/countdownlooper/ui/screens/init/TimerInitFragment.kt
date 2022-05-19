@@ -1,18 +1,25 @@
-package com.toms.applications.countdownlooper.screens.init
+package com.toms.applications.countdownlooper.ui.screens.init
 
 import android.os.Bundle
-import android.view.*
-import androidx.compose.foundation.BorderStroke
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
-import androidx.compose.material.ButtonDefaults.textButtonColors
+import androidx.compose.material.FabPosition
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -21,24 +28,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
-import com.toms.applications.countdownlooper.R
 import androidx.navigation.fragment.findNavController
-import com.google.accompanist.flowlayout.FlowColumn
-import com.google.accompanist.flowlayout.FlowRow
-import com.google.accompanist.insets.ProvideWindowInsets
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.toms.applications.countdownlooper.ui.components.*
+import com.toms.applications.countdownlooper.R
+import com.toms.applications.countdownlooper.ui.components.GenericSpacer
+import com.toms.applications.countdownlooper.ui.components.NumericKeyboard
+import com.toms.applications.countdownlooper.ui.components.PlusMinusNumber
+import com.toms.applications.countdownlooper.ui.components.SpacerType
+import com.toms.applications.countdownlooper.ui.components.StartFloatingActionButton
 import com.toms.applications.countdownlooper.utils.composeView
 import com.toms.applications.countdownlooper.utils.toTimeFormat
 import com.toms.applications.countdownlooper.utils.toTimer
-
 
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
