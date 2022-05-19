@@ -30,7 +30,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.toms.applications.countdownlooper.R
 import com.toms.applications.countdownlooper.ui.components.GenericSpacer
@@ -56,7 +59,27 @@ class TimerInitFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        setHasOptionsMenu(true)
+
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.toolbar_menu, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.id.action_settings -> {
+                            findNavController().navigate(TimerInitFragmentDirections.actionTimerSettingsFragmentToSettingsFragment())
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
 
         return composeView {
             var timeSettled by rememberSaveable { mutableStateOf("00 : 00 : 00") }
@@ -65,8 +88,8 @@ class TimerInitFragment : Fragment() {
 
             Scaffold(
                 floatingActionButton = {
-                   if (timeClicked.isNotEmpty() && timeClicked.toInt() > 0){
-                       StartFloatingActionButton(onClick = {
+                    if (timeClicked.isNotEmpty() && timeClicked.toInt() > 0) {
+                        StartFloatingActionButton(onClick = {
                            timeClicked.toTimer().let {
                                onStartCountDown(
                                    it[0] ?: 0,
@@ -145,20 +168,6 @@ class TimerInitFragment : Fragment() {
             }
         }
 
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.toolbar_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                findNavController().navigate(TimerInitFragmentDirections.actionTimerSettingsFragmentToSettingsFragment())
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     private fun onStartCountDown(hours: Int, minutes: Int, seconds: Int, repetitions: Int){
