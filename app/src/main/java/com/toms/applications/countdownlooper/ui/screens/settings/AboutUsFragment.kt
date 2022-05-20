@@ -1,14 +1,14 @@
 
-package com.toms.applications.countdownlooper.screens.settings
+package com.toms.applications.countdownlooper.ui.screens.settings
 
 import android.graphics.Color
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.toms.applications.countdownlooper.R
 import com.toms.applications.countdownlooper.databinding.FragmentAboutUsBinding
 

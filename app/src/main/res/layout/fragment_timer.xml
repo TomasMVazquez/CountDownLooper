@@ -9,14 +9,14 @@
             type="Integer" />
         <variable
             name="timerViewModel"
-            type="com.toms.applications.countdownlooper.screens.timer.TimerViewModel" />
+            type="com.toms.applications.countdownlooper.ui.screens.timer.TimerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primary_dark"
-        tools:context=".screens.timer.TimerFragment">
+        tools:context=".ui.screens.timer.TimerFragment">
 
         <TextView
             android:id="@+id/starts_in"

@@ -8,8 +8,12 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.toms.applications.countdownlooper.ui.theme.CountDownLooperTheme
-import java.util.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import java.util.Formatter
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 fun Fragment.hideKeyboard() {
@@ -20,15 +24,6 @@ fun Fragment.hideKeyboard() {
 /**
  * Reduce Boilerplate when creating view models
  */
-@Suppress("UNCHECKED_CAST")
-inline fun <reified T: ViewModel> Fragment.getViewModel(crossinline factory: () -> T): T {
-    val vmFactory = object : ViewModelProvider.Factory {
-        override fun <U : ViewModel> create(modelClass: Class<U>): U = factory() as U
-    }
-
-    return ViewModelProvider(this, vmFactory)[T::class.java]
-}
-
 fun Fragment.composeView(content: @Composable () -> Unit): ComposeView {
     return ComposeView(requireContext()).apply {
         setContent {
@@ -110,5 +105,10 @@ fun String.toTimer(): Map<Int, Int> {
         1 to mins,
         2 to secs
     )
+}
 
+fun <T> Fragment.collectState(flow: Flow<T>, collect: suspend (T) -> Unit) {
+    viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+        flow.collectLatest(collect)
+    }
 }

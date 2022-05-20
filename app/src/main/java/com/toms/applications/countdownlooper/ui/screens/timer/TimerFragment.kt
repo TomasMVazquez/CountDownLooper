@@ -1,18 +1,22 @@
-package com.toms.applications.countdownlooper.screens.timer
+package com.toms.applications.countdownlooper.ui.screens.timer
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.toms.applications.countdownlooper.R
 import com.toms.applications.countdownlooper.databinding.FragmentTimerBinding
-import com.toms.applications.countdownlooper.utils.*
+import com.toms.applications.countdownlooper.utils.BeepHelper
+import com.toms.applications.countdownlooper.utils.onGetTime
+import com.toms.applications.countdownlooper.utils.toTimerLongFormat
+import com.toms.applications.countdownlooper.utils.toTimerStringFormat
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -21,7 +25,7 @@ import kotlin.properties.Delegates
 class TimerFragment : Fragment() {
 
     private lateinit var binding: FragmentTimerBinding
-    private lateinit var viewModel: TimerViewModel
+    private val viewModel: TimerViewModel by viewModels()
     private val args by navArgs<TimerFragmentArgs>()
 
     private val beep = BeepHelper()
@@ -46,8 +50,7 @@ class TimerFragment : Fragment() {
 
         val timeSaved = onGetTime(requireContext())
         timeInBetweenSetted = if (timeSaved >= 0) (timeSaved.toLong() * 1000) else TimerViewModel.COUNT_DOWN_TIME_IN_BETWEEN
-
-        viewModel = getViewModel { TimerViewModel(timeInBetweenSetted) }
+        viewModel.getStartedTimeInBetween(timeInBetweenSetted)
 
         with(binding){
             timerViewModel = viewModel
