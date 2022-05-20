@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,6 +46,7 @@ import com.toms.applications.countdownlooper.utils.composeView
 import com.toms.applications.countdownlooper.utils.toTimeFormat
 import com.toms.applications.countdownlooper.utils.toTimer
 
+@ExperimentalAnimationApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 class TimerInitFragment : Fragment() {
@@ -56,8 +58,8 @@ class TimerInitFragment : Fragment() {
     }.chunked(3)
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         val menuHost: MenuHost = requireActivity()
@@ -90,17 +92,17 @@ class TimerInitFragment : Fragment() {
                 floatingActionButton = {
                     if (timeClicked.isNotEmpty() && timeClicked.toInt() > 0) {
                         StartFloatingActionButton(onClick = {
-                           timeClicked.toTimer().let {
-                               onStartCountDown(
-                                   it[0] ?: 0,
-                                   it[1] ?: 0,
-                                   it[2] ?: 0,
-                                   repeats
-                               )
-                           }
-                       })
-                   }
-               },
+                            timeClicked.toTimer().let {
+                                onStartCountDown(
+                                    it[0] ?: 0,
+                                    it[1] ?: 0,
+                                    it[2] ?: 0,
+                                    repeats
+                                )
+                            }
+                        })
+                    }
+                },
                 floatingActionButtonPosition = FabPosition.Center,
                 backgroundColor = MaterialTheme.colors.background
             ) { padding ->
@@ -108,7 +110,7 @@ class TimerInitFragment : Fragment() {
                 LazyColumn(modifier = Modifier
                     .padding(padding)
                     .fillMaxSize()
-                    .padding(24.dp)
+                    .padding(horizontal = 24.dp, vertical = 12.dp)
                 ) {
 
                     item {
@@ -120,6 +122,7 @@ class TimerInitFragment : Fragment() {
                             color = Color.White
                         )
                     }
+
                     item {
                         GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
                     }
@@ -137,9 +140,11 @@ class TimerInitFragment : Fragment() {
                             timeSettled = timeClicked.toTimeFormat()
                         })
                     }
+
                     item {
-                        GenericSpacer(type = SpacerType.VERTICAL, padding = 2.dp)
+                        GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
                     }
+
                     item {
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -154,6 +159,11 @@ class TimerInitFragment : Fragment() {
 
                         }
                     }
+
+                    item {
+                        GenericSpacer(type = SpacerType.VERTICAL, padding = 4.dp)
+                    }
+
                     item {
                         Box(modifier = Modifier.fillMaxWidth()) {
                             PlusMinusNumber(
@@ -167,10 +177,14 @@ class TimerInitFragment : Fragment() {
                 }
             }
         }
-
     }
 
-    private fun onStartCountDown(hours: Int, minutes: Int, seconds: Int, repetitions: Int){
+    private fun onStartCountDown(
+        hours: Int,
+        minutes: Int,
+        seconds: Int,
+        repetitions: Int
+    ) {
         val action = TimerInitFragmentDirections.actionTimerSettingsFragmentToTimerFragment(
             hours = hours,
             minutes = minutes,

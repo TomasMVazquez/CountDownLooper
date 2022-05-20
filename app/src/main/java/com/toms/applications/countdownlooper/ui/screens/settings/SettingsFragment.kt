@@ -31,8 +31,12 @@ class SettingsFragment : Fragment() {
             with(numPickerTimeBetween){
                 maxValue = 59
                 value = if (timeSettled >= 0) timeSettled else 5
-                setFormatter { kotlin.String.format("%02d", it) }
-                setOnScrollListener { picker, scrollState -> if(scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) { onTimeSettled(picker.value) } }
+                setFormatter { String.format("%02d", it) }
+                setOnScrollListener { picker, scrollState ->
+                    if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+                        onTimeSettled(picker.value)
+                    }
+                }
             }
             aboutUs.setOnClickListener { findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutUsFragment()) }
         }
