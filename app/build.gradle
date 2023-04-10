@@ -12,10 +12,10 @@ android {
     defaultConfig {
         applicationId "com.toms.applications.countdownlooper"
         minSdkVersion 26
-        compileSdkVersion 32
-        targetSdkVersion 32
-        versionCode 5
-        versionName "2.3"
+        compileSdkVersion 33
+        targetSdkVersion 33
+        versionCode 6
+        versionName "2.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

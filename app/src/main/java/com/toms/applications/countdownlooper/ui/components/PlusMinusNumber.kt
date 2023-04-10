@@ -2,18 +2,9 @@ package com.toms.applications.countdownlooper.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
@@ -39,7 +30,9 @@ fun PlusMinusNumber(input: Int, onInputChange: (Int) -> Unit) {
 
         OutlinedButton(
             modifier = Modifier.size(50.dp),
-            onClick = { if (input > 0) onInputChange(input.minus(1)) },
+            onClick = {
+                if (input > 1) onInputChange(input.minus(1))
+            },
             border = BorderStroke(1.dp, MaterialTheme.colors.primary),
             shape = CircleShape,
             colors = ButtonDefaults.outlinedButtonColors(
@@ -55,14 +48,15 @@ fun PlusMinusNumber(input: Int, onInputChange: (Int) -> Unit) {
             )
         }
 
-        Column(modifier = Modifier
-            .size(50.dp)
-            .border(
-                BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colors.primaryVariant
-                )
-            ),
+        Column(
+            modifier = Modifier
+                .size(50.dp)
+                .border(
+                    BorderStroke(
+                        width = 1.dp,
+                        color = MaterialTheme.colors.primaryVariant
+                    )
+                ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

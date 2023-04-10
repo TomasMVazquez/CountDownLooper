@@ -13,7 +13,6 @@ import com.toms.applications.countdownlooper.databinding.FragmentSettingsBinding
 import com.toms.applications.countdownlooper.utils.onGetTime
 import com.toms.applications.countdownlooper.utils.onSetTime
 
-
 class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
@@ -38,7 +37,9 @@ class SettingsFragment : Fragment() {
                     }
                 }
             }
-            aboutUs.setOnClickListener { findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutUsFragment()) }
+            aboutUs.setOnClickListener {
+                findNavController().navigate(SettingsFragmentDirections.actionSettingsFragmentToAboutUsFragment())
+            }
         }
 
         return binding.root

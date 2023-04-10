@@ -10,7 +10,7 @@
         <item name="colorSecondaryVariant">@color/primary_medium</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" >?attr/colorOnPrimary</item>
         <item name="android:actionBarStyle">@style/ThemeActionBar</item>
         <item name="android:actionBarTheme">@style/ThemeActionBar</item>
         <!-- Support library compatibility -->
@@ -42,5 +42,9 @@
     <style name="MyTextInputEditText_outlinedBox_dense_h" parent="@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox.Dense">
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="MyNumberPickerStyle">
+        <item name="android:textColorPrimary">@color/black</item>
     </style>
 </resources>

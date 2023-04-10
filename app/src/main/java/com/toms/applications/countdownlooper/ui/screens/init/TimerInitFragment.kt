@@ -86,7 +86,7 @@ class TimerInitFragment : Fragment() {
         return composeView {
             var timeSettled by rememberSaveable { mutableStateOf("00 : 00 : 00") }
             var timeClicked by rememberSaveable { mutableStateOf("") }
-            var repeats by rememberSaveable { mutableStateOf(0) }
+            var repeats by rememberSaveable { mutableStateOf(1) }
 
             Scaffold(
                 floatingActionButton = {

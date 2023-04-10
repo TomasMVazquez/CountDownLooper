@@ -34,6 +34,7 @@
             android:layout_marginEnd="24dp"
             android:background="@color/primary"
             android:solidColor="@color/primary_grey_light"
+            android:theme="@style/MyNumberPickerStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />

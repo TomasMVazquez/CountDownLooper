@@ -42,7 +42,7 @@ class TimerFragment : Fragment() {
 
         requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
-        repetition = args.repetition
+        repetition = args.repetition - 1
         val hours = TimeUnit.HOURS.toMillis(args.hours.toLong())
         val minutes = TimeUnit.MINUTES.toMillis(args.minutes.toLong())
         val seconds = TimeUnit.SECONDS.toMillis(args.seconds.toLong())
